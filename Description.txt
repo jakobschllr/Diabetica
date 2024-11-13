@@ -1,7 +1,7 @@
 Folgende Klassen benötigen wir
 
-- Menu: Benutzeroberfläche des Menüs und Optionen auswählen
-- BlutzuckerEingabe: Eingabe und Speicherung der Blutzuckerwerte in csv datei
-- BlutzuckerFeedback: Nutzer erhält Feedback zu gerade eingegebenen Blutzucker werten
-- Erinnerung: Nutzer kann Erinnerung erstellen, wann er 
-- Auswertung: Nutzer kann Auswertungen der Blutzuckerwerte für die letzten 7 Tage erhalten (aus csv Datei)
+- Menu: Benutzeroberfläche des Menüs und Optionen auswählen {Jakob}
+- Blutzucker: Eingabe und Speicherung der Blutzuckerwerte und eine Rückmeldung {Zaid}
+- Erinnerung: Nutzer kann Erinnerung erstellen/ ändern/ löschen (CSV./ txt. Datei) {Bardia}
+- Auswertung: Nutzer kann Auswertungen der Blutzuckerwerte für die letzten 7 Tage erhalten (aus csv Datei) {Alle}
+- Database: schreibt und liest die Werte aus CSV-Datei aus {Boby}
