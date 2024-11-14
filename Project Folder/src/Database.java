@@ -10,6 +10,25 @@ import java.io.FileWriter;
 
 
 public class Database {
+    
+    //Die offentliche-Klasse nimmt einen Blutzuckerwert und speichert es in einer csv Datei
+    public static void speichern(double blutZuckerWert) {
+        LocalDate todayDate = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+    }
+
+    // Liefert den Verlauf von Blutzuckerwerten
+    public static double[] verlauf(int dates) {
+        double[] verlauf = new double[0];
+        return verlauf;
+    }
+
+    
+    public static double[] verlauf() {
+        int dates = 7;
+        double[] verlauf = new double[0];
+        return verlauf;
+    }
 
     public static void main(String[] args) {
 
