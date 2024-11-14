@@ -15,7 +15,8 @@ import com.opencsv.CSVReader;
 public class Database {
 
     // Immutable CSV Dateiname
-    private static final String csvFileName = "Blutzuckerwerte.csv";
+    private static final String databaseFileName = "Blutzuckerwerte.csv";
+    private static final String erinnerungFileName = "Erinnerungen.csv";
     
     //Die offentliche-Klasse nimmt einen Blutzuckerwert und speichert es in einer csv Datei
     public static void speichern(double blutZuckerWert) {
@@ -41,23 +42,25 @@ public class Database {
 
     }
 
+    //
+
     // Verifies if the file already exists if no creates a neew file 
-    private static void  verifyFile() {
-        File database = new File(csvFileName);
+    private static boolean  verifyFile(File file) {
+
+        String fileName = file.getName();
         
         try {
-            FileReader dReader = new FileReader(csvFileName);
-        } catch (FileNotFoundException noFile) {
-            try {
-                if (database.createNewFile())
-                    System.out.println("New Database Created...");
-                else
-                    System.out.println("Cannot access File: " + csvFileName);
-            } catch (IOException ioException) {
-                System.out.println("An error occured!!!");
+            if(!file.isFile()){
+                return false;
             }
+            else if(file.canRead() && file.canWrite()){
+                return true;
+            }
+            else return false;
+        } catch (SecurityException e) {
+            System.out.println("File is not accessible.\nDelete File or grant access");
+            return false;
         }
-        
     }
 
     public static void main(String[] args) {
@@ -75,7 +78,10 @@ public class Database {
         System.out.println(time);
         System.out.println(date);
 
-        verifyFile();
+        File databaseFile = new File(databaseFileName);
+        File erinnerungFile = new File(erinnerungFileName);
+        System.out.println(verifyFile(databaseFile));
+        System.out.println(verifyFile(erinnerungFile));
         // System.out.println(LocalTime.now());
         // System.out.println(LocalDateTime.now());
     }
