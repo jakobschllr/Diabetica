@@ -5,11 +5,17 @@ import java.time.*;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
-// import com.opencsv.CSVReader;
+import java.io.IOException;
+
+import com.opencsv.CSVReader;
 
 
 public class Database {
+
+    // Immutable CSV Dateiname
+    private static final String csvFileName = "Blutzuckerwerte.csv";
     
     //Die offentliche-Klasse nimmt einen Blutzuckerwert und speichert es in einer csv Datei
     public static void speichern(double blutZuckerWert) {
@@ -23,11 +29,35 @@ public class Database {
         return verlauf;
     }
 
-    
+    // Overloading von velauf
     public static double[] verlauf() {
         int dates = 7;
         double[] verlauf = new double[0];
         return verlauf;
+    }
+
+    // Update our CSV File
+    private static void updateCSV() {
+
+    }
+
+    // Verifies if the file already exists if no creates a neew file 
+    private static void  verifyFile() {
+        File database = new File(csvFileName);
+        
+        try {
+            FileReader dReader = new FileReader(csvFileName);
+        } catch (FileNotFoundException noFile) {
+            try {
+                if (database.createNewFile())
+                    System.out.println("New Database Created...");
+                else
+                    System.out.println("Cannot access File: " + csvFileName);
+            } catch (IOException ioException) {
+                System.out.println("An error occured!!!");
+            }
+        }
+        
     }
 
     public static void main(String[] args) {
@@ -44,6 +74,8 @@ public class Database {
 
         System.out.println(time);
         System.out.println(date);
+
+        verifyFile();
         // System.out.println(LocalTime.now());
         // System.out.println(LocalDateTime.now());
     }
