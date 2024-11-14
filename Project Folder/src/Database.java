@@ -42,7 +42,35 @@ public class Database {
 
     }
 
-    //
+    // Creates a file
+    public static boolean createFile(File file, boolean isDb) {
+        if(!isDb) {
+            try {
+                if(file.createNewFile())
+                    return true;
+                else {
+                    System.out.println("File already exists");
+                    return false;}
+            } catch (IOException e) {
+                System.out.println("An error occured!!!");
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            try {
+                if(file.createNewFile()){
+                    initialise(file);
+                    return true;}
+                else {
+                    System.out.println("File already exists");
+                    return false;}
+            } catch (IOException e) {
+                System.out.println("An error occured!!!");
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
 
     // Verifies if the file already exists if no creates a neew file 
     private static boolean  verifyFile(File file) {
@@ -59,6 +87,7 @@ public class Database {
             else return false;
         } catch (SecurityException e) {
             System.out.println("File is not accessible.\nDelete File or grant access");
+            e.printStackTrace();
             return false;
         }
     }
