@@ -2,6 +2,7 @@
  * Database Programm um den Database mit CSV Dateien zu managen
  */
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -23,71 +24,116 @@ public class Database {
     private static File databaseFile = new File(databaseFileName);
     private static File erinnerungFile = new File(erinnerungFileName);
 
-    private List<LocalDate> dates = new ArrayList<>();
-    private List<List<Double>> data = new ArrayList<>();
+    private List<LocalDate> DATUM = new ArrayList<>(); 
+    private List<LocalTime> ZEIT = new ArrayList<>();
+    private List<Double> WERTE = new ArrayList<>();
 
-
+    // Konstruktor prueft ob die Datei existiert und lesbar ist
     public Database() {
         
         if(!verifyFile(databaseFile)) {
             if(createFile(databaseFile)) {
                 try {
                     this.initialiseFile();
-                    this.initialiseDatabase();
                 } catch (IOException e) {
                     System.out.println("IO Error...");
                     e.printStackTrace();
                 }
             }
         }
-        else{
-            System.out.println("Already exists db");
-        }
+
+        this.load();
 
         if(!verifyFile(erinnerungFile)) {
             if(!createFile(erinnerungFile)) {
-                System.out.println("Error er");
+                System.out.println("Fehler er");
             }
         }
-        else{
-            System.out.println("Already exists er");
+    }
+
+    // Returns an array of dates
+    public LocalDate[] getDates() {
+        int size = this.DATUM.size();
+        LocalDate[] dates = new LocalDate[size];
+        for (int i = 0; i < size; i++) {
+            dates[i] = this.DATUM.get(i);
         }
-    }
-    
-    //Die offentliche-Klasse nimmt einen Blutzuckerwert und speichert es in einer csv Datei
-    public static void speichern(double blutZuckerWert) {
-        LocalDate todayDate = LocalDate.now();
-        LocalTime timeNow = LocalTime.now();
-        System.out.println(todayDate + "" + timeNow);
+        return dates;
     }
 
-    // Liefert den Verlauf von Blutzuckerwerten
-    public static double[] verlauf(int dates) {
-        double[] verlauf = new double[0];
-        return verlauf;
+    // Returns an array of time
+    public LocalTime[] getTime() {
+        int size = this.ZEIT.size();
+        LocalTime[] time = new LocalTime[size];
+        for (int i = 0; i < size; i++) {
+            time[i] = this.ZEIT.get(i);
+        }
+        return time;
     }
 
-    // Overloading von velauf
-    public static double[] verlauf() {
-        int dates = 7;
-        double[] verlauf = new double[0];
-        System.out.println(dates);
-        return verlauf;
+    public double[] getValues() {
+        int size = this.WERTE.size();
+        double[] values = new double[size];
+        for (int i = 0; i < size; i++) {
+            values[i] = this.WERTE.get(i);
+        }
+        return values;
+    }
+
+    public String[][] getAll() {
+        int size = this.WERTE.size();
+        String[][] data = new String[size][3];
+        for (int i = 0; i < size; i++) {
+            data[i][0] = this.DATUM.get(i).toString();
+            data[i][1] = this.ZEIT.get(i).toString();
+            data[i][2] = Double.toString(this.WERTE.get(i));
+        }
+        return data;
     }
 
     // Update our CSV File
-    private static void updateCSV() {
+    public void add(double wert) {
+        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
+        this.DATUM.add(dateTime.toLocalDate());
+        this.ZEIT.add(dateTime.toLocalTime());
+        this.WERTE.add(wert);
     }
 
-    // Loads data from the CSV file to the database
+    // Speichert die Datenbank
+    public void save() {
+        try {
+            this.SaveDatabase();
+        } catch (IOException e) {
+            System.out.println("Fehler Datenbank nicht gespeichert");
+            e.printStackTrace();
+        }
+    }
+
+    // Ladet die Datenbank
+    private void load() {
+        try {
+            this.loadData();
+        } catch (FileNotFoundException e) {
+            System.out.println("File Not Found");
+            e.printStackTrace();
+        }
+    }
+
+    // Ladet Daten von CSV zu Datenbank
     private void loadData() throws FileNotFoundException {
         
         try {
             CSVReader reader = new CSVReader(new FileReader(databaseFileName));
             List<String[]> dataRaw = reader.readAll();
-            String[] header = dataRaw.get(0);
-            System.out.println(header[header.length - 1]);
+
+            for (int i = 1; i < dataRaw.size(); i++) {
+                String[] zeile = dataRaw.get(i);
+                DATUM.add(i-1, LocalDate.parse(zeile[0]));
+                ZEIT.add(i-1, LocalTime.parse(zeile[1]));
+                WERTE.add(i-1, Double.parseDouble(zeile[2]));
+            }
+
             reader.close();
         } catch ( Exception e) {
             System.out.println("Error...");
@@ -95,46 +141,47 @@ public class Database {
         }
     }
 
-    private void initialiseDatabase() {
+    // Save Database to file
+    private void SaveDatabase() throws IOException {
+        CSVWriter writer = new CSVWriter(new FileWriter(databaseFile));
+        String[] zeile = {"  Datum   ", "Zeit ", "Blutzucker"};
+        writer.writeNext(zeile);
 
-        for (int i = 0; i < 24; i++) {
-            data.add(i, new ArrayList<>());
-            data.get(i).addFirst(null);
+        for (int i = 0; i < this.DATUM.size(); i++) {
+            zeile[0] = this.DATUM.get(i).toString();
+            zeile[1] = this.ZEIT.get(i).toString();
+            zeile[2] = Double.toString(this.WERTE.get(i));
+            writer.writeNext(zeile);
         }
+        writer.close();
     }
 
+    // Initialisiert ne neue Datei
     private void initialiseFile() throws IOException{
         CSVWriter initialiser = new CSVWriter(new FileWriter(databaseFile));
-        String[] Dates = {"  :  ", LocalDate.now().toString()};
-        initialiser.writeNext(Dates);
-
-        LocalTime counter = LocalTime.of(0, 0);
-        for (int i = 0; i < 24; i++) {
-            String[] line = new String[] {counter.toString()};
-            counter = counter.plusHours(1);
-            initialiser.writeNext(line);
-        }
+        String[] header = {"  Datum   ", "Zeit ", "Blutzucker"};
+        initialiser.writeNext(header);
         initialiser.close();
 
     }
 
-    // Creates a file
+    // Erstellt Datei
     private boolean createFile(File file) {
         try {
             if(file.createNewFile())
                 return true;
             else {
-                System.out.println("File already exists");
+                System.out.println("Datei existiert schon");
                 return false;}
         } catch (IOException e) {
-            System.out.println("An error occured!!!");
+            System.out.println("Fehler !!!");
             e.printStackTrace();
             return false;
         }
     }
 
-    // Verifies if the file already exists if no creates a new file 
-    private static boolean  verifyFile(File file) {
+    // Pruft ob die Datei existiert,
+    private boolean  verifyFile(File file) {
         
         try {
             if(!file.isFile()){
@@ -145,37 +192,9 @@ public class Database {
             }
             else return false;
         } catch (SecurityException e) {
-            System.out.println("File is not accessible.\nDelete File or grant access");
+            System.out.println("Datei nicht Zugreifbar.\nDatei loeschen oder Zugang erlauben");
             e.printStackTrace();
             return false;
         }
-    }
-
-    public static void main(String[] args) {
-
-        // LocalDate date = LocalDate.now();
-        // LocalTime time = LocalTime.now();
-        // LocalTime hour = LocalTime.of(time.getHour(), 0);
-
-        // time = LocalTime.parse("15:30");
-        // date = LocalDate.parse("2024-11-13");
-
-        // System.out.println(time);
-        // System.out.println(date);
-
-        // System.out.println(verifyFile(erinnerungFile));
-
-        Database db = new Database();
-        try {
-            db.loadData();
-        } catch (FileNotFoundException e) {
-            System.out.println("Error File NOt Found");
-            e.printStackTrace();
-        }
-
-        // System.out.println(db.dates.isEmpty());
-
-        
-        
     }
 }
