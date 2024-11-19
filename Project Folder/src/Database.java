@@ -2,6 +2,7 @@
  * Database Programm um den Database mit CSV Dateien zu managen
  */
 import java.time.*;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
 
 
 public class Database {
@@ -43,12 +44,6 @@ public class Database {
         }
 
         this.load();
-
-        if(!verifyFile(erinnerungFile)) {
-            if(!createFile(erinnerungFile)) {
-                System.out.println("Fehler er");
-            }
-        }
     }
 
     // Returns an array of dates
@@ -166,7 +161,7 @@ public class Database {
     }
 
     // Erstellt Datei
-    private boolean createFile(File file) {
+    private static boolean createFile(File file) {
         try {
             if(file.createNewFile())
                 return true;
@@ -181,7 +176,7 @@ public class Database {
     }
 
     // Pruft ob die Datei existiert,
-    private boolean  verifyFile(File file) {
+    private static boolean  verifyFile(File file) {
         
         try {
             if(!file.isFile()){
@@ -196,5 +191,79 @@ public class Database {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void erinnerung() {
+        if(!verifyFile(erinnerungFile)) {
+            if(!createFile(erinnerungFile)) {
+                System.out.println("Fehler er");
+            }
+        }
+    }
+
+    // Setmalarm
+    public static void set(String time) {
+        try {
+            setAlarm(time);
+        } catch (IOException e) {
+            System.out.println("IO Error");
+            e.printStackTrace();
+        }
+    }
+
+    // Sets an alarm
+    private static void setAlarm(String time) throws IOException {
+        try{
+            LocalTime.parse(time);
+            CSVReader reader = new CSVReader(new FileReader(erinnerungFile));
+            List<String[]> alarms = reader.readAll();
+            alarms.add(new String[] {time});
+            CSVWriter setter = new CSVWriter(new FileWriter(erinnerungFile));
+            setter.writeAll(alarms);
+            reader.close();
+            setter.close();
+        } catch (DateTimeParseException e) {
+            System.out.println("Cannot Change Time");
+            e.printStackTrace();
+        } catch (CsvException e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+    }
+
+    // Returns an array of all alarms
+    public static String[] getAlarms() {
+        String[] alarmStrings = null;
+        try {
+            CSVReader reader = new CSVReader(new FileReader(erinnerungFile));
+            List<String[]> alarms = reader.readAll();
+            alarmStrings = new String[alarms.size()];
+            for (int i = 0; i < alarms.size(); i++) {
+                alarmStrings[i] = alarms.get(i)[0];
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+        return alarmStrings;
+    }
+
+    // Deletes Alarm at index i
+    public static void deleteAlarm(int index) {
+        CSVReader reader;
+        try {
+            reader = new CSVReader(new FileReader(erinnerungFile));
+            List<String[]> alarms = reader.readAll();
+            alarms.remove(index);
+            CSVWriter setter = new CSVWriter(new FileWriter(erinnerungFile));
+            setter.writeAll(alarms);
+            reader.close();
+            setter.close();
+        } catch (Exception e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+        
     }
 }
