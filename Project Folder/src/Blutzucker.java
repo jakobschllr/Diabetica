@@ -8,13 +8,16 @@ public class Blutzucker{
 		String ruckmeldung = ruckmeldung(blutzuckerwert);
 		String empfehlung = empfehlung(blutzuckerwert);
 		System.out.println(ruckmeldung + "\n" + empfehlung);
-	
+		Database db = new Database();
+		db.add(blutzuckerwert);
+		db.save();
+		input.close();
 	}
 	
 	public static String ruckmeldung(int blutzuckerwert ) {
 		String ruckmeldung;
 		if (blutzuckerwert > 80 && blutzuckerwert < 140) {
-			ruckmeldung = "gut";
+			ruckmeldung = "Blutzuckerspiegel befindet sich im typischen Bereich. Keine Handlungsbedarf.";
 		}else if (blutzuckerwert < 79) {
 			ruckmeldung = "Sie haben Unterzucker. ";
 		}else{
@@ -29,7 +32,7 @@ public class Blutzucker{
 		if (blutzuckerwert > 140 ) {
 			y = blutzuckerwert - 120;
 			int insulieEinheit = y / 30;
-			empfehlung = "Sie sollen " + insulieEinheit + " Einheitinsulin sprizen. ";
+			empfehlung = "Sie sollen " + insulieEinheit + " Einheiten Insulin spritzen. ";
 		}else if (blutzuckerwert < 79){
 			y= 120 - blutzuckerwert ;
 			int Kohlenhydrate = y/15;
