@@ -74,11 +74,11 @@ public class Erinnerung {
     }
 
     public static String checkErinnerung() {
-        String currentTime = LocalTime.now();
+        LocalTime currentTime = LocalTime.now();
         String[] liste = ansehen();
 
         for (int i = 0; i < liste.length; i++) {
-            LocalTime currentAlarm = new LocalTime.parse(liste[0]);
+            LocalTime currentAlarm = LocalTime.parse(liste[0]);
             System.out.println(currentAlarm);
         }
         return "";
