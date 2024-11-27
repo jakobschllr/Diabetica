@@ -2,20 +2,7 @@ import java.util.Scanner;
 import java.time.*;
 
 public class Erinnerung {
-    public static void showMenu () {
-        System.out.println("Wählen Sie den Menüpunkt anhand der Nummer aus.\n");
-        System.out.println("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-        System.out.println("|                                               |");
-        System.out.println("|  1: Neue Erinnerung erstellen                 |");
-        System.out.println("|  2: Bestehende Erinnerung löchen              |");
-        System.out.println("|  3: Erinnerung ansehen                        |");
-        System.out.println("|                                               |");
-        System.out.println("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-        System.out.println("|                                               |");
-        System.out.println("|  0: Zum Hauptmenu                             |");
-        System.out.println("|                                               |");
-        System.out.println("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-    }
+
     public static void erstellen() {
         Scanner input = new Scanner(System.in);
         System.out.println("Bitte geben Sie die Uhrzeit an.");
@@ -76,17 +63,25 @@ public class Erinnerung {
     public static String checkErinnerung() {
         LocalTime currentTime = LocalTime.now();
         String[] liste = ansehen();
+        //String[] liste  = {"15:00", "12:30"};
 
         for (int i = 0; i < liste.length; i++) {
-            LocalTime currentAlarm = LocalTime.parse(liste[0]);
-            System.out.println(currentAlarm);
+            LocalTime currentAlarm = LocalTime.parse(liste[i]);
+            int vergleich = currentTime.compareTo(currentAlarm); // negative Zahl: currentTime < currentAlarm
+            if (vergleich <= 0){
+                Duration differenz = Duration.between(currentTime, currentAlarm);
+                if (differenz.toMinutes() <= 30){
+                    return "Erinnerung!!! \nLangzeitinsulin um " + currentAlarm + " in " + differenz.toMinutes() + " Minuten einnehmen.";
+                }
+            }
         }
         return "";
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         String result = checkErinnerung();
+        System.out.print(result);
 
-        }
-    }
+        }*/
+}
