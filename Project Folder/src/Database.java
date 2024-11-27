@@ -1,6 +1,4 @@
-/*
- * Database Programm um den Database mit CSV Dateien zu managen
- */
+
 import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -15,12 +13,16 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 
-
+/**
+ * Database Programm um den Database mit CSV Dateien zu managen
+ */
 public class Database {
 
     // Immutable CSV Dateiname
-    private static String databaseFileName = "Blutzuckerwerte.csv";
-    private static String erinnerungFileName = "Erinnerungen.csv";
+    // Der Name der CSV Datei, wo die Blutzuckerwerte und die Zeit gespeichert werden
+    private static String databaseFileName = "Blutzuckerwerte.csv"; 
+    // Der Name der CSV Datei, wo die Erinnerungen gespeichert werden
+    private static String erinnerungFileName = "Erinnerungen.csv"; 
 
     private static File databaseFile = new File(databaseFileName);
     private static File erinnerungFile = new File(erinnerungFileName);
@@ -29,7 +31,13 @@ public class Database {
     private List<LocalTime> ZEIT = new ArrayList<>();
     private List<Double> WERTE = new ArrayList<>();
 
-    // Konstruktor prueft ob die Datei existiert und lesbar ist
+    /**
+     * Konstruktor fuer die Datenbank.
+     * prueft ob die CSV Datei schon existiert, und les und schreibbar ist.
+     * wenn ja, dann nichts mehr wird gemacht,
+     * wenn nein, dann wird eine erstellt und initialisiert.
+     * Erstellt dann eine Instanz der Dantenbank und ladet die Daten von CSV
+     */
     public Database() {
         
         if(!verifyFile(databaseFile)) {
@@ -46,7 +54,10 @@ public class Database {
         this.load();
     }
 
-    // Returns an array of dates
+    /**
+     * Liefert ein LocalDate Array von allen Daten in der Datenbank
+     * @return LocalDate[] Array von allen Daten in der Datenbank
+     */
     public LocalDate[] getDates() {
         int size = this.DATUM.size();
         LocalDate[] dates = new LocalDate[size];
@@ -56,7 +67,10 @@ public class Database {
         return dates;
     }
 
-    // Returns an array of time
+    /**
+     * Liefert ein LocalTime Array von allen Zeiten in der Datenbank
+     * @return LocalTime[] Array von allen Zeiten in der Datenbank
+     */
     public LocalTime[] getTime() {
         int size = this.ZEIT.size();
         LocalTime[] time = new LocalTime[size];
@@ -66,6 +80,10 @@ public class Database {
         return time;
     }
 
+    /**
+     * Liefert ein double Array von allen gespeicherten Blutzuckerwerten in der Datenbank
+     * @return double[] Array von allen Blutzuckerwerten in der Datenbank
+     */
     public double[] getValues() {
         int size = this.WERTE.size();
         double[] values = new double[size];
@@ -75,6 +93,16 @@ public class Database {
         return values;
     }
 
+    /**
+     * Gibt alle Daten in der Datenbank zurueck.
+     * Jeder Wert und die damit verbundenen Datum und Uhrzeit ist in einem String Array gespeichert. 
+     * Beispiel: ["2021-06-01", "12:00", "120.0"]
+     * Und jeder dieser Arrays ist in einem 2D Array gespeichert.
+     * Beispiel: [["2021-06-01", "12:00", "120.0"], 
+     *            ["2021-06-02", "12:00", "120.0"]]
+     * 
+     * @return String[][] 2D Array mit allen Daten von der Datenbank 
+     */
     public String[][] getAll() {
         int size = this.WERTE.size();
         String[][] data = new String[size][3];
@@ -86,8 +114,14 @@ public class Database {
         return data;
     }
 
-    // Update our CSV File
+    /**
+     * Fuegt einen neuen Blutzuckerwert in die Datenbank ein
+     * Das Datum und die Uhrzeit werden auch gleichzeitigzur Datenbank hinzugefuegt
+     * @param wert der Wert der eingefuegt werden soll
+     * @return void
+     */
     public void add(double wert) {
+        
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
         this.DATUM.add(dateTime.toLocalDate());
@@ -95,7 +129,11 @@ public class Database {
         this.WERTE.add(wert);
     }
 
-    // Speichert die Datenbank
+    /**
+     * Offentliche Methode:  Speichert die Datenbank von der Instanz in die CSV Datei
+     * Fehler werden abgefangen und ausgegeben wenn die Datenbank nicht gespeichert werden kann
+     * @return void
+     */
     public void save() {
         try {
             this.SaveDatabase();
@@ -105,7 +143,13 @@ public class Database {
         }
     }
 
-    // Ladet die Datenbank
+    /**
+     * Private Methode: Ladet die Daten von der CSV Datei in die Datenbank Instanz 
+     * Ruf die Methode loadData auf
+     * Gibt "File Not Found" aus wenn die Datei nicht gefunden wird
+     * Diese Methode wird nur von dem Konstruktor aufgerufen wenn eine neue Datenbank Instanz erstellt wird
+     * @return void
+     */
     private void load() {
         try {
             this.loadData();
@@ -115,7 +159,13 @@ public class Database {
         }
     }
 
-    // Ladet Daten von CSV zu Datenbank
+    /**
+     * Private Methode: Ladet die Daten von der CSV Datei in die Datenbank Instanz
+     * Die Daten werden in ihre jeweiligen Datentyen konvertiert
+     * und werden dann in die Listen DATUM, ZEIT und WERTE gespeichert
+     * @return void
+     * @throws FileNotFoundException wenn die Datei nicht gefunden wird
+     */
     private void loadData() throws FileNotFoundException {
         
         try {
@@ -136,7 +186,12 @@ public class Database {
         }
     }
 
-    // Save Database to file
+    /**
+     * Private Methode: Schreibt die Daten von der Datenbank Instanz in die CSV Datei
+     * Alle Daten in der Datenbank Instanz werden in die CSV Datei geschrieben 
+     * @return void
+     * @throws IOException wenn die Datei nicht geschrieben werden kann
+     */
     private void SaveDatabase() throws IOException {
         CSVWriter writer = new CSVWriter(new FileWriter(databaseFile));
         String[] zeile = {"  Datum   ", "Zeit ", "Blutzucker"};
@@ -151,7 +206,12 @@ public class Database {
         writer.close();
     }
 
-    // Initialisiert ne neue Datei
+    /**
+     * Private Methode: Initialisiert die CSV Datei
+     * Die CSV Datei wird mit einem Header initialisiert
+     * @return void
+     * @throws IOException wenn die Datei nicht geschrieben werden kann
+     */
     private void initialiseFile() throws IOException{
         CSVWriter initialiser = new CSVWriter(new FileWriter(databaseFile));
         String[] header = {"  Datum   ", "Zeit ", "Blutzucker"};
@@ -160,7 +220,12 @@ public class Database {
 
     }
 
-    // Erstellt Datei
+    /**
+     * Private Methode: Erstellt eine Datei
+     * @param file die Datei die erstellt werden soll
+     * @return boolean true wenn die Datei erstellt wurde, false wenn ein Fehler aufgetreten ist oder die Datei schon existiert
+     * 
+     */
     private static boolean createFile(File file) {
         try {
             if(file.createNewFile())
@@ -175,7 +240,12 @@ public class Database {
         }
     }
 
-    // Pruft ob die Datei existiert,
+    /**
+     * Private Methode: Ueberprueft ob die Datei lesbar und schreibbar ist
+     * @param file die Datei die ueberprueft werden soll
+     * @return boolean true wenn die Datei lesbar und schreibbar ist, false wenn nicht oder wenn die Datei nicht existiert
+     * 
+     */
     private static boolean  verifyFile(File file) {
         
         try {
@@ -193,6 +263,9 @@ public class Database {
         }
     }
 
+    /**
+     * Oeffentliche Methode: ruft verifyFile und createFile auf um die Datei zu erstellen, wenn sie nicht existiert
+     */
     public static void erinnerung() {
         if(!verifyFile(erinnerungFile)) {
             if(!createFile(erinnerungFile)) {
@@ -201,7 +274,11 @@ public class Database {
         }
     }
 
-    // Setmalarm
+    /**
+     * Oeffentliche Methode Setzt eine Erinnerung
+     * Ruft die private Methode setAlarm auf
+     * @param time String Zeit im Format "HH:MM"
+     */
     public static void set(String time) {
         try {
             setAlarm(time);
@@ -211,7 +288,14 @@ public class Database {
         }
     }
 
-    // Sets an alarm
+    /**
+     * Private Methode: Setzt eine neue Erinnerung
+     * Liest alle Errinerungen aus der CSV Datei und speichert es in einer Liste
+     * Fuegt die neue Erinnerung hinzu und schreibt die Liste in die CSV Datei
+     * @param time String Zeit im Format "HH:MM"
+     * @throws IOException wenn die Datei nicht geschrieben werden kann
+     * 
+     */
     private static void setAlarm(String time) throws IOException {
         try{
             LocalTime.parse(time);
@@ -231,7 +315,11 @@ public class Database {
         }
     }
 
-    // Returns an array of all alarms
+    /**
+     * Oeffentliche Methode: Gibt alle Erinnerungen zurueck
+     * Liest alle Errinerungen aus der CSV Datei und speichert es in einer Liste
+     * @return String[] Array von allen Erinnerungen in der CSV Datei
+     */
     public static String[] getAlarms() {
         String[] alarmStrings = null;
         try {
@@ -249,7 +337,13 @@ public class Database {
         return alarmStrings;
     }
 
-    // Deletes Alarm at index i
+    /**
+     * Oeffentliche Methode: Loescht eine Erinnerung
+     * Liest alle Errinerungen aus der CSV Datei und speichert es in einer Liste
+     * loescht die Erinnerung und schreibt die Liste in die CSV Datei
+     * @param index index der Erinnerung die geloescht werden soll
+     * @return void
+     */
     public static void deleteAlarm(int index) {
         CSVReader reader;
         try {
