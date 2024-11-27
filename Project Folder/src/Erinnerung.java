@@ -17,7 +17,14 @@ public class Erinnerung {
                 System.out.println("Die Minuten:");
                 int eingabeMinute = input.nextInt();
                 if ((eingabeMinute < 60) && (eingabeMinute >= 0)) {
-                    String eingabe = eingabeStunde + ":" + eingabeMinute;
+                    String minute;
+                    if (eingabeMinute < 10) {
+                        minute = "0" + eingabeMinute;
+                    }
+                    else
+                        minute = eingabeMinute + "";
+
+                    String eingabe = eingabeStunde + ":" + minute;
                     Database.erinnerung();
                     Database.set(eingabe);
                     System.out.println("Erinnerung für " + eingabe + " erfolgreich gespeichert.");
@@ -36,33 +43,39 @@ public class Erinnerung {
     }
 
     public static void loeschen(){
-      Scanner input = new Scanner(System.in);
+        Database.erinnerung();
+        Scanner input = new Scanner(System.in);
 
-      boolean istKorrekteEingabe = false;
+        boolean istKorrekteEingabe = false;
 
-    while(!istKorrekteEingabe) {
-        System.out.println("Welche Erinnerung möchten Sie löschen?");
-        int eingabe = input.nextInt();
-        if ((Database.getAlarms().length > eingabe) & (eingabe > 0)) {
-            Database.erinnerung();
-            Database.deleteAlarm(eingabe-1);
-            System.out.println("Erinnerung " + eingabe + " erfolgreich gelöscht.");
-            istKorrekteEingabe = true;
-        } else {
-            System.out.println("Keine gültige Eingabe!!");
+        while(!istKorrekteEingabe) {
+            System.out.println("Welche Erinnerung möchten Sie löschen?");
+            int eingabe = input.nextInt();
+            if ((Database.getAlarms().length > eingabe) & (eingabe > 0)) {
+
+                Database.deleteAlarm(eingabe-1);
+                System.out.println("Erinnerung " + eingabe + " erfolgreich gelöscht.");
+                istKorrekteEingabe = true;
+            } else {
+                System.out.println("Keine gültige Eingabe!!");
+            }
         }
-    }
 
 
     }
 
     public static String[] ansehen(){
+        Database.erinnerung();
         return Database.getAlarms();
     }
 
     public static String checkErinnerung() {
         LocalTime currentTime = LocalTime.now();
         String[] liste = ansehen();
+        for (int i = 0; i < liste.length; i++) {
+            System.out.println(liste[i]);
+        }
+
         //String[] liste  = {"15:00", "12:30"};
 
         for (int i = 0; i < liste.length; i++) {
@@ -78,10 +91,18 @@ public class Erinnerung {
         return "";
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
 
-        String result = checkErinnerung();
-        System.out.print(result);
 
-        }*/
+
+        String[] results = Erinnerung.ansehen();
+        System.out.print(java.util.Arrays.toString(results));
+
+        Erinnerung.loeschen();
+
+
+        String[] results2 = Erinnerung.ansehen();
+        System.out.print(java.util.Arrays.toString(results2));
+
+    }
 }
