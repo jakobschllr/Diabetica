@@ -91,7 +91,7 @@ public class Erinnerung {
         return "";
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
 
 
@@ -104,5 +104,5 @@ public class Erinnerung {
         String[] results2 = Erinnerung.ansehen();
         System.out.print(java.util.Arrays.toString(results2));
 
-    }
+    }*/
 }
