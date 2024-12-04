@@ -3,7 +3,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Menu {
 	
-	public static void textPrint (String text) throws InterruptedException {
+	private static final String HORIZ_BORDER = "+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+";
+	private static final String SIDE_BORDERS = "|                                               |";
+	private static final String BACK_TO_MAIN_MENU = "|  0: Zurück zum Hauptmenü                      |";
+	
+	/**
+	 * Die private Klassenmethode 'textPrint' erhält einen String als Parameter und gibt die einzelnen Zeichen
+	 * des String mit einer zeitlichen Verzögerung von 40 Millisekunden auf der Konsole aus. Dadurch wird eine 'Tipp-Animation' erzeugt.
+	 * @param text ist der String dessen Zeichen mit Zeitverzögerung auf der Konsole ausgegeben werden sollen.
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void textPrint (String text) throws InterruptedException {
 		for (int i = 0; i < text.length(); i++) {
 			System.out.print(text.charAt(i));
 			TimeUnit.MILLISECONDS.sleep(40);
@@ -11,7 +21,13 @@ public class Menu {
 		System.out.println("\n");
 	}
 	
-	public static void menuPrint (String text) throws InterruptedException {
+	/**
+	 * Die private Klassenmethode 'menuPrint' erhält einen String der Elemente des Menüs das in der Konsole angezeigt wird enthält und
+	 * gibt die Zeichen aus denen der String besteht mit einer zeitlichen Verzögerung von 2 Millisekunden auf der Konsole aus.
+	 * @param text ist der String dessen Zeichen mit Zeitverzögerung auf der Konsole ausgegeben werden sollen.
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void menuPrint (String text) throws InterruptedException {
 		for (int i = 0; i < text.length(); i++) {
 			System.out.print(text.charAt(i));
 			if (text.charAt(i) != ' ') 
@@ -20,7 +36,12 @@ public class Menu {
 		System.out.print("\n");
 	}
 	
-	public static void outroPrint () throws InterruptedException {
+	/**
+	 * Die private Klassenmethode 'outroPrint' wird ausgeführt wenn das Programm vom User beendet wird und gibt den Namen der
+	 * App - 'Diabetica' - auf der Konsole aus.
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void outroPrint () throws InterruptedException {
 		
 		String line1 = "*********     **          **          ********      *********     **********     **       *******          **";
 		String line2 = "**********    **        ******        *********     *********     **********     **     *********        ******";
@@ -38,9 +59,11 @@ public class Menu {
 		
 		System.out.println("\n\n\n");
 		
+		String orangeColor = "\u001B[33m";
+		
 		for (String line: lines) {
 			for (int c = 0; c < line.length(); c++) {
-				System.out.print(line.charAt(c));
+				System.out.print(orangeColor + line.charAt(c));
 				TimeUnit.MILLISECONDS.sleep(2);
 			}
 			System.out.println();
@@ -49,15 +72,13 @@ public class Menu {
 		
 		Menu.textPrint("\nby Boby, Zaid, Bardia & Jakob");
 	}
-	
-	
-	public static void mainMenu () throws InterruptedException {
 		
+	/**
+	 * Die private Klassenmethode 'menuMain' gibt das Hauptmenü auf der Konsole aus.
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void mainMenu () throws InterruptedException {	
 		System.out.println("\n");
-		
-		String upperBorder = "+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+";
-		String sideBorders = "|                                               |";
-		
 		
 		String menuName = "|                  Hauptmenü                    |";
 		String option1 = "|  1: Aktuelle Blutzuckerwerte eingeben         |";
@@ -65,76 +86,81 @@ public class Menu {
 		String option3 = "|  3: Auswertungen ansehen                      |";
 		String exitOption = "|  0: Programm beenden                          |";
 		
-		Menu.menuPrint(upperBorder);
+		Menu.menuPrint(HORIZ_BORDER);
 		Menu.menuPrint(menuName);
-		Menu.menuPrint(upperBorder);
-		Menu.menuPrint(sideBorders);
+		Menu.menuPrint(HORIZ_BORDER);
+		Menu.menuPrint(SIDE_BORDERS);
 		
 		Menu.menuPrint(option1);
 		Menu.menuPrint(option2);
 		Menu.menuPrint(option3);
 		
-		Menu.menuPrint(sideBorders);
-		Menu.menuPrint(upperBorder);
-		Menu.menuPrint(sideBorders);
+		Menu.menuPrint(SIDE_BORDERS);
+		Menu.menuPrint(HORIZ_BORDER);
+		Menu.menuPrint(SIDE_BORDERS);
 		Menu.menuPrint(exitOption);
-		Menu.menuPrint(sideBorders);
-		Menu.menuPrint(upperBorder);
+		Menu.menuPrint(SIDE_BORDERS);
+		Menu.menuPrint(HORIZ_BORDER);
 		
 		System.out.println("\n");
 	}
 	
-	public static void erinnerungenAnsehen(String[] erinnerungen)  throws InterruptedException {
-		String upperBorder = "+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+";
-		String sideBorders = "|                                               |";
+	/**
+	 * Die private Klassenmethode 'erinnerungenAnsehen' erhält einen String Array der alle gespeicherten Erinnerungen enthält und diese 
+	 * dann übersichtlich auf der Konsole ausgibt.
+	 * @param erinnerungen String Array der alle gespeicherten Erinnerungen enthält
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void erinnerungenAnsehen(String[] erinnerungen)  throws InterruptedException {
 		String menuName =    "|           Gespeicherten Erinnerungen          |";
 		
-		Menu.menuPrint(upperBorder);
+		Menu.menuPrint(HORIZ_BORDER);
 		Menu.menuPrint(menuName);
-		Menu.menuPrint(upperBorder);
-		Menu.menuPrint(sideBorders);
+		Menu.menuPrint(HORIZ_BORDER);
+		Menu.menuPrint(SIDE_BORDERS);
 		
 		for (int e = 0; e < erinnerungen.length; e++) {
 			System.out.println("|                " + (e+1) + ":  " + erinnerungen[e] + "                      |");
 		}
 		
-		Menu.menuPrint(sideBorders);
-		Menu.menuPrint(upperBorder);
+		Menu.menuPrint(SIDE_BORDERS);
+		Menu.menuPrint(HORIZ_BORDER);
 		System.out.println("\n");
 		
 	}
 	
-	
-	public static void erinnerungMenu(Scanner eingabe) throws InterruptedException {
+	/**
+	 * Die private Klassenmethode 'erinnerungMenu' gibt das Menü für die Erinnerungsverwaltung des Programms auf der Konsole aus.
+	 * @param eingabe Scanner Object aus dem Main Menu, damit User im Erinnerungs Menü Eingaben machen kann.
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void erinnerungMenu(Scanner eingabe) throws InterruptedException {
 		System.out.println("\n");
-		String upperBorder = "+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+";
-		String sideBorders = "|                                               |";
 		
 		String menuName = "|            Erinnerungen verwalten             |";
 		String option1 = "|  1: Neue Erinnerung erstellen                 |";
 		String option2 = "|  2: Bestehende Erinnerung löschen             |";
 		String option3 =  "|  3: Alle Erinnerungen ansehen                 |";
-		String exitOption = "|  0: Zurück zum Hauptmenü                      |";
 		
 		
 		boolean erinnerungMenuRunning = true;
 		
 		while (erinnerungMenuRunning) {
 			
-			Menu.menuPrint(upperBorder);
+			Menu.menuPrint(HORIZ_BORDER);
 			Menu.menuPrint(menuName);
-			Menu.menuPrint(upperBorder);
-			Menu.menuPrint(sideBorders);
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(SIDE_BORDERS);
 			Menu.menuPrint(option1);
 			Menu.menuPrint(option2);
 			Menu.menuPrint(option3);
 			
-			Menu.menuPrint(sideBorders);
-			Menu.menuPrint(upperBorder);
-			Menu.menuPrint(sideBorders);
-			Menu.menuPrint(exitOption);
-			Menu.menuPrint(sideBorders);
-			Menu.menuPrint(upperBorder);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(BACK_TO_MAIN_MENU);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(HORIZ_BORDER);
 			
 			Menu.textPrint("Ihre Eingabe");
 			int input = eingabe.nextInt();
@@ -160,28 +186,32 @@ public class Menu {
 		System.out.println("\n");
 	}
 	
-	public static void blutzuckerMenu(Scanner eingabe) throws InterruptedException {
-		
+	/**
+	 * Die private Klassenmethode 'blutzuckerMenu' gibt das Menü für die Eingabe von Erinnerungen ass der Konsole aus
+	 * @param eingabe Scanner Object aus dem Main Menu, damit User im Blutzucker Menü Eingaben machen kann.
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void blutzuckerMenu(Scanner eingabe) throws InterruptedException {		
 		System.out.println("\n");
-		String upperBorder = "+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+";
-		String sideBorders = "|                                               |";
 		
 		String menuName = "|                   Blutzucker                  |";
 		String option1 =  "|  1: Aktuellen Blutzuckerwert eingeben         |";
-		String exitOption = "|  0: Zurück zum Hauptmenü                      |";
 		
 		boolean blutzuckerMenuRunning = true;
 		
 		while (blutzuckerMenuRunning) {
 			
-			Menu.menuPrint(upperBorder);
+			Menu.menuPrint(HORIZ_BORDER);
 			Menu.menuPrint(menuName);
-			Menu.menuPrint(upperBorder);
-			Menu.menuPrint(sideBorders);
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(SIDE_BORDERS);
 			Menu.menuPrint(option1);
-			Menu.menuPrint(exitOption);
-			Menu.menuPrint(sideBorders);
-			Menu.menuPrint(upperBorder);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(BACK_TO_MAIN_MENU);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(HORIZ_BORDER);
 
 			
 			Menu.textPrint("Ihre Eingabe");
@@ -201,6 +231,13 @@ public class Menu {
 		
 	}
 	
+	/**
+	 * Öffentliche Klassenmethode 'main'  begrüßt den User und führt die while-Schleife aus, in der alle anderen Methoden des Programms
+	 * aufgerufen werden. Immer wenn der Code in der While-Schleife von vorne beginnt wird geprüft, ob in den nächsten 30 Minuten eine
+	 * Erinnerung zutreffen muss. Wenn dies so ist, erhält der User die Erinnerung.
+	 * @param args Standard Parameter für main-Methode
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		
 		boolean runProgram = true;
@@ -215,8 +252,13 @@ public class Menu {
 		
 		while (runProgram) {
 			
-			// checken, ob gerade eine Erinnerung zutreffen muss, wenn ja dann den User erinnern
-			System.out.println(Erinnerung.checkErinnerung());
+			
+			String redColor = "\u001B[31m";
+			String resetColor = "\u001B[0m";
+			
+			
+			String erinnerung = Erinnerung.checkErinnerung();
+			System.out.println(redColor + erinnerung + resetColor);
 			
 			Menu.mainMenu();
 			
