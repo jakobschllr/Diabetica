@@ -11,7 +11,7 @@ public class Blutzucker{
 		Database db = new Database();
 		db.add(blutzuckerwert);
 		db.save();
-		input.close();
+		
 	}
 	/**
 	 * Überprüft den übergebenen Blutzuckerwert und gibt eine passende Rückmeldung.
