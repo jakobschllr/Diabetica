@@ -32,11 +32,11 @@ public class Blutzucker{
 	public static String ruckmeldung(int blutzuckerwert ) {
 		String ruckmeldung;
 		if (blutzuckerwert > 80 && blutzuckerwert < 140) {
-			ruckmeldung = "Blutzuckerspiegel befindet sich im typischen Bereich. Keine Handlungsbedarf.";
+			ruckmeldung = "\nBlutzuckerspiegel befindet sich im typischen Bereich. Keine Handlungsbedarf.";
 		}else if (blutzuckerwert < 79) {
-			ruckmeldung = "Sie haben Unterzucker. ";
+			ruckmeldung = "\nSie haben Unterzucker. ";
 		}else{
-			ruckmeldung = "Sie haben Hochrzucker. ";
+			ruckmeldung = "\nSie haben Hochzucker. ";
 		
 	}return  ruckmeldung;
 	
@@ -57,11 +57,11 @@ public class Blutzucker{
 		if (blutzuckerwert > 140 ) {
 			y = blutzuckerwert - 120;
 			int insulieEinheit = y / 30;
-			empfehlung = "Sie sollen " + insulieEinheit + " Einheiten Insulin spritzen. ";
+			empfehlung = "Sie sollten " + insulieEinheit + " Einheiten Insulin spritzen.\n";
 		}else if (blutzuckerwert < 79){
 			y= 120 - blutzuckerwert ;
 			int Kohlenhydrate = y/15;
-			empfehlung = "Sie sollen " + Kohlenhydrate + " g Kohlenhydrate essen. ";
+			empfehlung = "Sie sollten " + Kohlenhydrate + " g Kohlenhydrate essen.\n";
 		}else {
 			empfehlung = " ";
 		}
