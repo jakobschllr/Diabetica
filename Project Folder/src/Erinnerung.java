@@ -2,20 +2,7 @@ import java.util.Scanner;
 import java.time.*;
 
 public class Erinnerung {
-    public static void showMenu () {
-        System.out.println("Wählen Sie den Menüpunkt anhand der Nummer aus.\n");
-        System.out.println("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-        System.out.println("|                                               |");
-        System.out.println("|  1: Neue Erinnerung erstellen                 |");
-        System.out.println("|  2: Bestehende Erinnerung löchen              |");
-        System.out.println("|  3: Erinnerung ansehen                        |");
-        System.out.println("|                                               |");
-        System.out.println("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-        System.out.println("|                                               |");
-        System.out.println("|  0: Zum Hauptmenu                             |");
-        System.out.println("|                                               |");
-        System.out.println("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-    }
+
     public static void erstellen() {
         Scanner input = new Scanner(System.in);
         System.out.println("Bitte geben Sie die Uhrzeit an.");
@@ -30,7 +17,14 @@ public class Erinnerung {
                 System.out.println("Die Minuten:");
                 int eingabeMinute = input.nextInt();
                 if ((eingabeMinute < 60) && (eingabeMinute >= 0)) {
-                    String eingabe = eingabeStunde + ":" + eingabeMinute;
+                    String minute;
+                    if (eingabeMinute < 10) {
+                        minute = "0" + eingabeMinute;
+                    }
+                    else
+                        minute = eingabeMinute + "";
+
+                    String eingabe = eingabeStunde + ":" + minute;
                     Database.erinnerung();
                     Database.set(eingabe);
                     System.out.println("Erinnerung für " + eingabe + " erfolgreich gespeichert.");
@@ -45,31 +39,32 @@ public class Erinnerung {
                 System.out.println("Eingabe nicht korrekt.");
             }
         }
-        input.close();
     }
 
     public static void loeschen(){
-      Scanner input = new Scanner(System.in);
+        Database.erinnerung();
+        Scanner input = new Scanner(System.in);
 
-      boolean istKorrekteEingabe = false;
+        boolean istKorrekteEingabe = false;
 
-    while(!istKorrekteEingabe) {
-        System.out.println("Welche Erinnerung möchten Sie löschen?");
-        int eingabe = input.nextInt();
-        if ((Database.getAlarms().length > eingabe) & (eingabe > 0)) {
-            Database.erinnerung();
-            Database.deleteAlarm(eingabe-1);
-            System.out.println("Erinnerung " + eingabe + " erfolgreich gelöscht.");
-            istKorrekteEingabe = true;
-        } else {
-            System.out.println("Keine gültige Eingabe!!");
+        while(!istKorrekteEingabe) {
+            System.out.println("Welche Erinnerung möchten Sie löschen?");
+            int eingabe = input.nextInt();
+            if ((Database.getAlarms().length >= eingabe) & (eingabe > 0)) {
+
+                Database.deleteAlarm(eingabe-1);
+                System.out.println("Erinnerung " + eingabe + " erfolgreich gelöscht.");
+                istKorrekteEingabe = true;
+            } else {
+                System.out.println("Keine gültige Eingabe!!");
+            }
         }
-    }
 
 
     }
 
     public static String[] ansehen(){
+        Database.erinnerung();
         return Database.getAlarms();
     }
 
@@ -78,15 +73,30 @@ public class Erinnerung {
         String[] liste = ansehen();
 
         for (int i = 0; i < liste.length; i++) {
-            LocalTime currentAlarm = LocalTime.parse(liste[0]);
-            System.out.println(currentAlarm);
+            LocalTime currentAlarm = LocalTime.parse(liste[i]);
+            int vergleich = currentTime.compareTo(currentAlarm); // negative Zahl: currentTime < currentAlarm
+            if (vergleich <= 0){
+                Duration differenz = Duration.between(currentTime, currentAlarm);
+                if (differenz.toMinutes() <= 30){
+                    return "Erinnerung!!! \nLangzeitinsulin um " + currentAlarm + " in " + differenz.toMinutes() + " Minuten einnehmen.";
+                }
+            }
         }
         return "";
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
-        String result = checkErinnerung();
 
-        }
-    }
+
+        String[] results = Erinnerung.ansehen();
+        System.out.print(java.util.Arrays.toString(results));
+
+        Erinnerung.loeschen();
+
+
+        String[] results2 = Erinnerung.ansehen();
+        System.out.print(java.util.Arrays.toString(results2));
+
+    }*/
+}
