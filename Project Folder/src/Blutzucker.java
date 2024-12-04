@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Blutzucker{
 	public static void main(String [] args) {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Geben Sie ihre aktuelle Blutzucker: ");
+		System.out.println("Geben Sie Ihren aktuellen Blutzuckerwert ein: ");
 		int blutzuckerwert = input.nextInt();
 		String ruckmeldung = ruckmeldung(blutzuckerwert);
 		String empfehlung = empfehlung(blutzuckerwert);
