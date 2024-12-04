@@ -35,16 +35,16 @@ public class Erinnerung {
                     Database.set(eingabe); // Speichert die Erinnerung
                     String green = "\u001B[32m";
                     String reset = "\u001B[0m";
-                    System.out.println(green + "Erinnerung für " + eingabe + " erfolgreich gespeichert." + reset);
+                    System.out.println("\n" + green + "Erinnerung für " + eingabe + " erfolgreich gespeichert." + reset);
 
                     korrekteEingabe = true;
                 }
                 else {
-                    System.out.println("Eingabe nicht korrekt.");
+                    System.out.println("\n" + "Eingabe nicht korrekt.");
                 }
             }
             else {
-                System.out.println("Eingabe nicht korrekt.");
+                System.out.println("\n" + "Eingabe nicht korrekt.");
             }
         }
     }
@@ -66,10 +66,10 @@ public class Erinnerung {
                 Database.deleteAlarm(eingabe-1); // Löscht die Erinnerung an der angegebenen Position
                 String green = "\u001B[32m";
                 String reset = "\u001B[0m";
-                System.out.println(green + "Erinnerung " + eingabe + " erfolgreich gelöscht." + reset);
+                System.out.println("\n" + green + "Erinnerung " + eingabe + " erfolgreich gelöscht." + reset);
                 istKorrekteEingabe = true;
             } else {
-                System.out.println("Keine gültige Eingabe!!");
+                System.out.println("\n" + "Keine gültige Eingabe!!");
             }
         }
 
