@@ -33,7 +33,9 @@ public class Erinnerung {
                     String eingabe = eingabeStunde + ":" + minute;
                     Database.erinnerung(); // Initialisiert die Datenbank
                     Database.set(eingabe); // Speichert die Erinnerung
-                    System.out.println("Erinnerung für " + eingabe + " erfolgreich gespeichert.");
+                    String green = "\u001B[32m";
+                    String reset = "\u001B[0m";
+                    System.out.println(green + "Erinnerung für " + eingabe + " erfolgreich gespeichert." + reset);
 
                     korrekteEingabe = true;
                 }
@@ -62,7 +64,9 @@ public class Erinnerung {
             if ((Database.getAlarms().length >= eingabe) & (eingabe > 0)) {
 
                 Database.deleteAlarm(eingabe-1); // Löscht die Erinnerung an der angegebenen Position
-                System.out.println("Erinnerung " + eingabe + " erfolgreich gelöscht.");
+                String green = "\u001B[32m";
+                String reset = "\u001B[0m";
+                System.out.println(green + "Erinnerung " + eingabe + " erfolgreich gelöscht." + reset);
                 istKorrekteEingabe = true;
             } else {
                 System.out.println("Keine gültige Eingabe!!");
