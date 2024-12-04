@@ -39,7 +39,6 @@ public class Erinnerung {
                 System.out.println("Eingabe nicht korrekt.");
             }
         }
-        input.close();
     }
 
     public static void loeschen(){
@@ -51,7 +50,7 @@ public class Erinnerung {
         while(!istKorrekteEingabe) {
             System.out.println("Welche Erinnerung möchten Sie löschen?");
             int eingabe = input.nextInt();
-            if ((Database.getAlarms().length > eingabe) & (eingabe > 0)) {
+            if ((Database.getAlarms().length >= eingabe) & (eingabe > 0)) {
 
                 Database.deleteAlarm(eingabe-1);
                 System.out.println("Erinnerung " + eingabe + " erfolgreich gelöscht.");
@@ -72,11 +71,6 @@ public class Erinnerung {
     public static String checkErinnerung() {
         LocalTime currentTime = LocalTime.now();
         String[] liste = ansehen();
-        for (int i = 0; i < liste.length; i++) {
-            System.out.println(liste[i]);
-        }
-
-        //String[] liste  = {"15:00", "12:30"};
 
         for (int i = 0; i < liste.length; i++) {
             LocalTime currentAlarm = LocalTime.parse(liste[i]);
