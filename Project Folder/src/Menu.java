@@ -232,6 +232,51 @@ public class Menu {
 	}
 	
 	/**
+	 * Die private Klassenmethode 'auswertungMenu' gibt das Menü für die Auswertungen auf der Konsole aus und kommuniziert mit der
+	 * Auswertung Klasse.
+	 * @param eingabe Scanner Objekt aus Menu
+	 * @throws InterruptedException notwendig damit die Zeitverzögerung mit java.util.concurrent.TimeUnit ohne Error funktioniert
+	 */
+	private static void auswertungMenu(Scanner eingabe) throws InterruptedException {
+		
+		String menuName = "|                   Auswertung                  |";
+		String option1 =  "|  1: Auswertung erhalten                       |";
+		
+			
+			
+		
+		boolean runAuswertungMenu = true;
+		
+		while (runAuswertungMenu) {
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(menuName);
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(option1);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(HORIZ_BORDER);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(BACK_TO_MAIN_MENU);
+			Menu.menuPrint(SIDE_BORDERS);
+			Menu.menuPrint(HORIZ_BORDER);
+			System.out.println("Wählen Sie eine Option.");
+			int input = eingabe.nextInt();
+			if (input == 1) {
+				Auswertung.getAuswertung(eingabe);
+			}
+			else if (input == 0) {
+				runAuswertungMenu = false;
+			}
+			else {
+				System.out.println("\nUngültige Eingabe\n");
+			}
+			
+			
+		}
+		
+	}
+	
+	/**
 	 * Öffentliche Klassenmethode 'main'  begrüßt den User und führt die while-Schleife aus, in der alle anderen Methoden des Programms
 	 * aufgerufen werden. Immer wenn der Code in der While-Schleife von vorne beginnt wird geprüft, ob in den nächsten 30 Minuten eine
 	 * Erinnerung zutreffen muss. Wenn dies so ist, erhält der User die Erinnerung.
@@ -272,7 +317,7 @@ public class Menu {
 				Menu.erinnerungMenu(eingabe);
 			}
 			else if (userInput == 3) {
-				System.out.println("Methode für Auswertungen");
+				Menu.auswertungMenu(eingabe);
 			}
 			else if (userInput == 0) {
 				runProgram = false;
