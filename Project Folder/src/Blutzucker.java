@@ -31,9 +31,9 @@ public class Blutzucker{
 	 */
 	public static String ruckmeldung(int blutzuckerwert ) {
 		String ruckmeldung;
-		if (blutzuckerwert > 80 && blutzuckerwert < 140) {
+		if (blutzuckerwert >= 80 && blutzuckerwert < 140) {
 			ruckmeldung = "\nBlutzuckerspiegel befindet sich im typischen Bereich. Keine Handlungsbedarf.";
-		}else if (blutzuckerwert < 79) {
+		}else if (blutzuckerwert <= 79) {
 			ruckmeldung = "\nSie haben Unterzucker. ";
 		}else{
 			ruckmeldung = "\nSie haben Hochzucker. ";

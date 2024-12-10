@@ -289,7 +289,7 @@ public class Menu {
 		
 		Scanner eingabe = new Scanner(System.in);
 		
-		String greeting = "Willkommen zu Diabetica, deinem Diabetis Assistenten!";
+		String greeting = "Willkommen zu Diabetica, deinem Diabetes Assistenten!";
 		String expl = "\nWähle den Menüpunkt anhand der Nummer aus";
 		
 		Menu.textPrint(greeting);
