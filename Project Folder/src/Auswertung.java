@@ -28,28 +28,29 @@ public class Auswertung {
 		if (anzahlTage >= 1) {
 			System.out.println("\n");
 			
-			System.out.printf("%-14s %-10s %-20s%n", "Datum", "Uhrzeit", "Blutzuckerwerte");
-			
-			for (int i = anzahlTage -1; i >= 0; i--) {
-				LocalDate todayMinusSeven = today.minusDays(i);
-				for (int j = 0; j < values.length; j++) {
-					if (dates[j].equals(todayMinusSeven)) {
-						if (values[j] >= maxBlutzucker) {
-							maxBlutzucker = values[j];
-							hoechsterWert = "" + dates[j] + " um " + times[j];
+			if (minBlutzucker != 5000.0 && maxBlutzucker != 0.0) {
+				System.out.printf("%-14s %-10s %-20s%n", "Datum", "Uhrzeit", "Blutzuckerwerte");
+				for (int i = anzahlTage -1; i >= 0; i--) {
+					LocalDate todayMinusSeven = today.minusDays(i);
+					for (int j = 0; j < values.length; j++) {
+						if (dates[j].equals(todayMinusSeven)) {
+							if (values[j] >= maxBlutzucker) {
+								maxBlutzucker = values[j];
+								hoechsterWert = "" + dates[j] + " um " + times[j];
+							}
+							if (values[j] <= minBlutzucker) {
+								minBlutzucker = values[j];
+								niedrigsteWert = "" + dates[j] + " um " + times[j];
+							}
+							System.out.printf("%-14s %-10s %-10.1f%n", dates[j], times[j], values[j]);
 						}
-						if (values[j] <= minBlutzucker) {
-							minBlutzucker = values[j];
-							niedrigsteWert = "" + dates[j] + " um " + times[j];
-						}
-						System.out.printf("%-14s %-10s %-10.1f%n", dates[j], times[j], values[j]);
 					}
 				}
+				System.out.println("Höchster Wert am " + hoechsterWert + " mit " + maxBlutzucker);
+				System.out.println("Niedrigster Wert am " + niedrigsteWert + " mit " + minBlutzucker);
+			} else {
+				System.out.println("Keine Werte im Zeitraum von " + anzahlTage + " Tagen gefunden.");
 			}
-			
-			System.out.println("\n");
-			System.out.println("Höchster Wert am " + hoechsterWert + " mit " + maxBlutzucker);
-			System.out.println("Niedrigster Wert am " + niedrigsteWert + " mit " + minBlutzucker);
 			
 			System.out.println("\n");
 		}
